@@ -1,0 +1,9 @@
+[project]
+name = "repl-nix-supabasegradiocustomerregistration"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.11"
+dependencies = [
+    "streamlit>=1.40.1",
+    "supabase>=2.10.0",
+]
