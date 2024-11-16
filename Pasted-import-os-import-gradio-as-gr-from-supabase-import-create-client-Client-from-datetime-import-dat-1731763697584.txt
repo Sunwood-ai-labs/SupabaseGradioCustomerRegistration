@@ -1,0 +1,91 @@
+import os
+import gradio as gr
+from supabase import create_client, Client
+from datetime import datetime
+
+
+from google.colab import userdata
+os.environ['SUPABASE_URL'] = userdata.get('SUPABASE_URL')
+os.environ['SUPABASE_KEY'] = userdata.get('SUPABASE_KEY')
+
+# Supabaseの設定
+SUPABASE_URL = os.getenv('SUPABASE_URL')
+SUPABASE_KEY = os.getenv('SUPABASE_KEY')
+
+if not SUPABASE_URL or not SUPABASE_KEY:
+    raise ValueError(
+        "SUPABASE_URL and SUPABASE_KEY environment variables are required")
+
+# Supabaseクライアントの初期化
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+
+
+def add_customer(first_name, last_name, email, phone="", address=""):
+    try:
+        # 顧客データの作成
+        customer_data = {
+            "first_name": first_name,
+            "last_name": last_name,
+            "email": email,
+            "phone": phone,
+            "address": address
+        }
+
+        # Supabaseに顧客を追加
+        response = supabase.table("customers").insert(customer_data).execute()
+
+        # 全顧客データの取得
+        result = supabase.table("customers") \
+            .select("*") \
+            .order("created_at", desc=True) \
+            .execute()
+
+        # 顧客リストのフォーマット
+        customer_list = []
+        for row in result.data:
+            customer_info = f"{row['first_name']} {row['last_name']} ({row['email']})"
+            if row['phone']:
+                customer_info += f", Phone: {row['phone']}"
+            if row['address']:
+                customer_info += f", Address: {row['address']}"
+            customer_info += f" - Registered: {row['created_at']}"
+            customer_list.append(customer_info)
+
+        return "\n".join(customer_list)
+
+    except Exception as e:
+        return f"Error: {str(e)}"
+
+
+# Gradioインターフェースの作成
+with gr.Blocks(theme=gr.themes.Base()) as iface:
+    gr.Markdown("""
+    # 顧客管理システム
+    シンプルで使いやすい顧客管理システムです。
+    """)
+
+    with gr.Row():
+        with gr.Column():
+            first_name_input = gr.Textbox(label="姓", placeholder="山田")
+            last_name_input = gr.Textbox(label="名", placeholder="太郎")
+            email_input = gr.Textbox(label="メールアドレス",
+                                     placeholder="example@email.com")
+            phone_input = gr.Textbox(label="電話番号（任意）",
+                                     placeholder="090-1234-5678")
+            address_input = gr.Textbox(label="住所（任意）", placeholder="東京都渋谷区...")
+
+            submit_btn = gr.Button("登録", variant="primary")
+
+        with gr.Column():
+            output = gr.Textbox(label="顧客一覧", lines=10)
+
+    submit_btn.click(add_customer,
+                     inputs=[
+                         first_name_input, last_name_input, email_input,
+                         phone_input, address_input
+                     ],
+                     outputs=output)
+
+# アプリの起動
+if __name__ == "__main__":
+    iface.launch(server_name="0.0.0.0", server_port=5000)
