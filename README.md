@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="header.svg" alt="顧客管理システム" width="800">
+</p>
+
 # 🏢 顧客管理システム
 
 ## 📝 概要
