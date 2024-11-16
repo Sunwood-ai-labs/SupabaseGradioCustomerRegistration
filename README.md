@@ -2,7 +2,13 @@
   <img src="header.svg" alt="顧客管理システム" width="800">
 </p>
 
-# 🏢 顧客管理システム
+<h1 align="center">🏢 顧客管理システム</h1>
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=Streamlit&logoColor=white">
+  <img src="https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white">
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white">
+</p>
 
 ## 📝 概要
 StreamlitとSupabaseを使用した日本語の顧客管理システムです。
