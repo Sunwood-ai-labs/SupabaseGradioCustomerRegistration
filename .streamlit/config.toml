@@ -4,8 +4,8 @@ address = "0.0.0.0"
 port = 5000
 
 [theme]
-primaryColor = "#0066cc"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f0f2f6"
-textColor = "#262730"
+primaryColor = "#4B0082"  # Japanese indigo (紺色)
+backgroundColor = "#FFFFFF"  # Pure white (白)
+secondaryBackgroundColor = "#F5F5F5"  # Light grey (白鼠)
+textColor = "#333333"  # Dark grey for text
 font = "sans serif"
